@@ -1,5 +1,5 @@
 (ns autorizador.adapter.transaction-test
-  (:require [clojure.test :refer [are deftest is testing use-fixtures]]
+  (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [autorizador.adapter.transaction :as adapter.transaction]
             [schema.test :as st]))
 

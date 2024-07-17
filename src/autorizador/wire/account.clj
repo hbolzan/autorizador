@@ -1,7 +1,16 @@
 (ns autorizador.wire.account
-  (:require [autorizador.model.account :as model.account]
-            [schema.core :as s])
-  (:import [java.math BigDecimal]))
+  (:require [schema.core :as s])
+  (:import
+   [java.math BigDecimal]))
+
+(def benefit-categories #{:food :meal :cash})
+(def BenefitCategory (apply s/enum benefit-categories))
+
+(s/defschema Transaction
+  {:id        s/Uuid
+   :source-id s/Uuid
+   :amount    BigDecimal
+   :category  BenefitCategory})
 
 (s/defschema Balances
   {:food BigDecimal
@@ -9,6 +18,7 @@
    :cash BigDecimal})
 
 (s/defschema Account
-  {:id          s/Uuid
-   :customer-id s/Uuid
-   :balances    Balances})
+  {:id           s/Uuid
+   :customer-id  s/Uuid
+   :transactions [Transaction]
+   :balances     Balances})

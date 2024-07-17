@@ -20,13 +20,16 @@
   ([db-id data-record swap-fn]
    (swap! (get @databases db-id) swap-fn (-> data-record :id) data-record)))
 
+(defn file-name [db-id]
+  (->> db-id name (format "resources/%s.edn")))
+
 (defn save-db!
   "Save database data into file"
-  [db-id file-name]
-  (spit file-name (-> databases deref (get db-id) deref)))
+  [db-id]
+  (spit (file-name db-id) (-> databases deref (get db-id) deref)))
 
 (defn load-db!
   "Load data from edn file into db"
-  [db-id file-name]
-  (let [content (slurp file-name)]
-    ))
+  [db-id]
+  (let [content (-> db-id file-name slurp read-string)]
+    (init-db! db-id content)))

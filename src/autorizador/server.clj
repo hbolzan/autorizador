@@ -1,11 +1,10 @@
 (ns autorizador.server
-  (:require
-   [autorizador.middleware.input :as middleware.input]
-   [autorizador.wire.transaction :as wire.transaction]
-   [compojure.core :refer [defroutes POST routes]]
-   [org.httpkit.server :as httpkit.server]
-   [ring.middleware.json :as middleware]
-   [ring.util.response :refer [response]]))
+  (:require [autorizador.middleware.input :as middleware.input]
+            [autorizador.wire.transaction :as wire.transaction]
+            [compojure.core :refer [defroutes POST routes]]
+            [org.httpkit.server :as httpkit.server]
+            [ring.middleware.json :as middleware]
+            [ring.util.response :refer [response]]))
 
 (defn with-middleware [handler middleware-list]
   (reduce (fn [h m] (m h)) handler (reverse middleware-list)))

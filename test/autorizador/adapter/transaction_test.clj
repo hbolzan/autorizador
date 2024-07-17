@@ -16,11 +16,11 @@
                          :merchant   "PADARIA DO ZE               SAO PAULO BR"
                          :mcc        :5811}})
 
-(def internal #:transaction {:id       #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
-                             :account  account
-                             :amount   123.45M
-                             :mcc      :5811
-                             :merchant "PADARIA DO ZE               SAO PAULO BR"})
+(def internal #:transaction{:id       #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
+                            :account  account
+                            :amount   123.45M
+                            :mcc      :5811
+                            :merchant "PADARIA DO ZE               SAO PAULO BR"})
 
 (deftest wire->internal
   (testing "Adapts wire transaction to internal model"

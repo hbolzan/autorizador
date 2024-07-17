@@ -74,5 +74,20 @@
   ;; the next transaction wikk be denied
   (transact #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07" :5411 70.00M "PADARIA DO ZE               SAO PAULO BR")
 
+  (defn rejection-code [e]
+    (let [cause (.getCause e)]
+      (if cause
+        (read-string (.getMessage cause))
+        {:code :07})))
+
+  (try
+    (throw (Exception. "Insufficient funds" (Exception. "{:code :51}")))
+    (catch Exception e
+      (rejection-code e)))
+
+  (try
+    (throw (Exception. "Other error"))
+    (catch Exception e
+      (rejection-code e)))
   ;;
   )

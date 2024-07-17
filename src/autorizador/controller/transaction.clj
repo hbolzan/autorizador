@@ -15,7 +15,8 @@
       (throw (Exception. (format "Insufficient funds - account-id: %s, transaction-id %s, amount: %s"
                                  account-id
                                  (:transaction/id transaction)
-                                 (:transaction/amount transaction)))))))
+                                 (:transaction/amount transaction))
+                         (Exception. "{:code :51}"))))))
 
 (s/defn authorize!
   [transaction  :- model.transaction/Transaction]

@@ -25,10 +25,16 @@
           data (s/validate schema (-> request :data coercer))]
       (-> request (assoc :data data) handler))))
 
+(defn rejection-code [e]
+  (let [cause (.getCause e)]
+    (if cause
+      (read-string (.getMessage cause))
+      {:code :07})))
+
 (defn wrap-exception-handler [handler]
   (fn [request]
     (try
       (handler request)
       (catch Exception e
         (println e)
-        (response {:authorization {:code :07}})))))
+        (response {:authorization (rejection-code e)})))))

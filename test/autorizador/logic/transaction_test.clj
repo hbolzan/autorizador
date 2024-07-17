@@ -5,18 +5,12 @@
 
 (use-fixtures :once st/validate-schemas)
 
-(def customer #:customer {:id #uuid "42524b09-f172-48cc-a406-f80161c9cf5e"})
-
-(def account #:account{:id           #uuid "09a06fdb-20e4-4c72-9a69-68b7c97df23b"
-                       :customer     customer
-                       :transactions []})
-
 (defn transaction [mcc]
-  #:transaction {:id       #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
-                 :account  account
-                 :amount   123.45M
-                 :mcc      mcc
-                 :merchant "PADARIA DO ZE               SAO PAULO BR"})
+  #:transaction {:id         #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
+                 :account-id #uuid "09a06fdb-20e4-4c72-9a69-68b7c97df23b"
+                 :amount     123.45M
+                 :mcc        mcc
+                 :merchant   "PADARIA DO ZE               SAO PAULO BR"})
 
 (deftest transaction->benefit-category
   (testing "Maps transaction mcc to benefit category or cash")

@@ -1,5 +1,6 @@
 (ns autorizador.server
-  (:require [autorizador.diplomat.http-in :as diplomat.http-in]
+  (:require [autorizador.controller.account :as controller.account]
+            [autorizador.diplomat.http-in :as diplomat.http-in]
             [autorizador.middleware.input :as middleware.input]
             [autorizador.wire.transaction :as wire.transaction]
             [compojure.core :refer [defroutes POST routes]]
@@ -33,5 +34,6 @@
 (defn -main
   [& args]
   (let [port 8838]
+    (controller.account/start-up!)
     (println (format "Servidor escutando na porta %s" port))
     (httpkit.server/run-server service {:port port})))

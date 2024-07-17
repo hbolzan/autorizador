@@ -18,7 +18,7 @@
     (handler request)))
 
 (defroutes transaction
-  (POST "/api/v1/transaction" request (diplomat.http-in/handle-transaction request)))
+  (POST "/api/v1/transaction" request (diplomat.http-in/handle-transaction (:data request))))
 
 (def service
   (-> (routes

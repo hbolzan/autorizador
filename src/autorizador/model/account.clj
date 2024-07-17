@@ -1,6 +1,5 @@
 (ns autorizador.model.account
-  (:require [autorizador.model.customer :as model.customer]
-            [schema.core :as s])
+  (:require [schema.core :as s])
   (:import [java.math BigDecimal]))
 
 (def benefit-categories #{:food :meal :cash})
@@ -14,5 +13,5 @@
 
 (s/defschema Account
   #:account{:id           s/Uuid
-            :customer     model.customer/Customer
+            :customer-id  s/Uuid
             :transactions [Transaction]})

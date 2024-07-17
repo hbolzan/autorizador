@@ -1,9 +1,9 @@
 (ns autorizador.middleware.input
-  (:require [schema.core :as s]
-            [camel-snake-kebab.core :as csk]
+  (:require [camel-snake-kebab.core :as csk]
             [cheshire.core :as json]
+            [ring.util.response :refer [response]]
             [schema.coerce :as coerce]
-            [ring.util.response :refer [response]]))
+            [schema.core :as s]))
 
 (defn parse-body [handler]
   (fn [request]

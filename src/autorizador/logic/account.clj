@@ -22,7 +22,7 @@
 
 (s/defn with-updated-balance :- wire.account/Account
   [account :- wire.account/Account
-   {:transaction/keys [amount] source-id :transaction/id :as transaction} :- model.transaction/Transaction]
+   {:transaction/keys [amount] :as transaction} :- model.transaction/Transaction]
   (let [category (logic.transaction/transaction->benefit-category transaction)
         balance  (-> account :balances (get category))]
     (assoc-in account [:balances category] (- balance amount))))

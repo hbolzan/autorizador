@@ -22,8 +22,8 @@
 (defn wrap-schema-validation [handler schema]
   (fn [request]
     (let [coercer (coerce/coercer schema wire-matcher)
-          data (-> request :data coercer)]
-      (->> data (s/validate schema) handler))))
+          data (s/validate schema (-> request :data coercer))]
+      (-> request (assoc :data data) handler))))
 
 (defn wrap-exception-handler [handler]
   (fn [request]

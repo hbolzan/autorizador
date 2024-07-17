@@ -1,10 +1,10 @@
 (ns autorizador.server
-  (:require [autorizador.middleware.input :as middleware.input]
+  (:require [autorizador.diplomat.http-in :as diplomat.http-in]
+            [autorizador.middleware.input :as middleware.input]
             [autorizador.wire.transaction :as wire.transaction]
             [compojure.core :refer [defroutes POST routes]]
             [org.httpkit.server :as httpkit.server]
-            [ring.middleware.json :as middleware]
-            [ring.util.response :refer [response]]))
+            [ring.middleware.json :as middleware]))
 
 (defn with-middleware [handler middleware-list]
   (reduce (fn [h m] (m h)) handler (reverse middleware-list)))
@@ -18,7 +18,7 @@
     (handler request)))
 
 (defroutes transaction
-  (POST "/api/v1/transaction" [] (response {:code :07})))
+  (POST "/api/v1/transaction" request (diplomat.http-in/handle-transaction request)))
 
 (def service
   (-> (routes

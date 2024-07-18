@@ -1,9 +1,10 @@
 (ns autorizador.server
   (:require [autorizador.controller.account :as controller.account]
+            [autorizador.controller.merchant :as controller.merchant]
             [autorizador.diplomat.http-in :as diplomat.http-in]
             [autorizador.middleware.input :as middleware.input]
             [autorizador.wire.transaction :as wire.transaction]
-            [compojure.core :refer [GET POST defroutes routes]]
+            [compojure.core :refer [defroutes GET POST routes]]
             [org.httpkit.server :as httpkit.server]
             [ring.middleware.json :as middleware]))
 
@@ -37,6 +38,8 @@
       middleware/wrap-json-response))
 
 (defn start-server [port]
+  (controller.account/start-up!)
+  (controller.merchant/start-up!)
   (httpkit.server/run-server service {:port port}))
 
 (defn stop-server [server]
@@ -45,6 +48,5 @@
 (defn -main
   [& args]
   (let [port 8838]
-    (controller.account/start-up!)
     (println (format "Servidor escutando na porta %s" port))
     (start-server port)))

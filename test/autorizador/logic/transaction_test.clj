@@ -9,17 +9,24 @@
 (def merchant-5812 {:id "UBER EATS                   SAO PAULO BR" :mcc :5812})
 (def merchant-9999 {:id "UBER TRIP                   SAO PAULO BR" :mcc :9999})
 
+(defn with-merchant [transaction merchant]
+  (if merchant
+    (assoc transaction :transaction/merchant merchant)
+    transaction))
+
 (defn transaction [mcc merchant]
-  #:transaction {:id          #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
-                 :account-id  #uuid "09a06fdb-20e4-4c72-9a69-68b7c97df23b"
-                 :amount      123.45M
-                 :mcc         mcc
-                 :merchant-id (or (:id merchant) "PADARIA DO ZE               SAO PAULO BR")})
+  (with-merchant
+    #:transaction{:id          #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
+                  :account-id  #uuid "09a06fdb-20e4-4c72-9a69-68b7c97df23b"
+                  :amount      123.45M
+                  :mcc         mcc
+                  :merchant-id (or (:id merchant) "PADARIA DO ZE               SAO PAULO BR")}
+    merchant))
 
 (deftest transaction->benefit-category
   (testing "Maps transaction mcc to benefit category or cash")
   (are [?mcc ?merchant ?category]
-       (= ?category (logic.transaction/transaction->benefit-category (transaction ?mcc ?merchant) ?merchant))
+       (= ?category (logic.transaction/transaction->benefit-category (transaction ?mcc ?merchant)))
     :5411 nil           :food
     :5412 nil           :food
     :5811 nil           :meal

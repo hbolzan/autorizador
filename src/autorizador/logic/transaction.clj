@@ -11,7 +11,6 @@
                     :else :cash})
 
 (s/defn  transaction->benefit-category :- wire.account/BenefitCategory
-  [{transaction-mcc :transaction/mcc} :- model.transaction/Transaction
-   merchant :- (s/maybe wire.merchant/Merchant)]
+  [{transaction-mcc :transaction/mcc merchant :transaction/merchant} :- model.transaction/Transaction]
   (let [mcc (or (:mcc merchant) transaction-mcc)]
     (or (get mcc->category mcc) (:else mcc->category))))

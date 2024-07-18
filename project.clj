@@ -8,7 +8,8 @@
                  [ring/ring-json "0.5.1"]
                  [compojure "1.7.1"]
                  [http-kit "2.8.0"]
-                 [prismatic/schema "1.4.1"]]
+                 [prismatic/schema "1.4.1"]
+                 [camel-snake-kebab "0.4.3"]]
   :main ^:skip-aot autorizador.server
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all

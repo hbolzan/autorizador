@@ -48,11 +48,11 @@ A cada desafio, abri um PR separado para possibilitar a visualização da evolu�
 O projeto é amplamente coberto por testes unitários, visando abranger todos os casos de uso. Além disso, foram incluídos testes de integração. A análise dos testes permite compreender o funcionamento da lógica, conhecer os payloads e entender as intenções por trás do design de cada componente.
 
 ### Endpoints
-* `/api/v1/transaction, POST` - Envio de transações para autorização
-* `/api/v1/accounts`, GET` - Consulta a lista de todas as contas cadastradas
-* `/api/v1/accounts/:id`, GET` - Consulta uma conta
-* `/api/v1/merchants`, GET` - Consulta a lista de todos os comerciantes cadastrados
-* `/api/v1/merchants/:name`, GET` - Consulta um comerciante
+* `/api/v1/transaction POST` - Envio de transações para autorização
+* `/api/v1/accounts GET` - Consulta a lista de todas as contas cadastradas
+* `/api/v1/accounts/:id GET` - Consulta uma conta
+* `/api/v1/merchants GET` - Consulta a lista de todos os comerciantes cadastrados
+* `/api/v1/merchants/:name GET` - Consulta um comerciante
 
 ### Banco de dados
 Para o banco de dados, optei por uma abordagem simplificada utilizando um atom do Clojure como storage. Essa escolha me ajudou a manter o foco no desafio principal sem adicionar a complexidade de um banco de dados real. Ao mesmo tempo, as atualizações do atom são atômicas e serializadas, replicando o comportamento de um banco de dados com capacidades de transações atômicas.

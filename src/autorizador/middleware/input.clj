@@ -36,5 +36,5 @@
     (try
       (handler request)
       (catch Exception e
-        (println e)
+        ;; (println e)
         (response {:authorization (rejection-code e)})))))

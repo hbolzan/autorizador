@@ -4,8 +4,10 @@
             [schema.core :as s]))
 
 (defn start-up! []
-  (diplomat.db/load-db! :accounts)
-  (println (->> diplomat.db/databases deref :accounts deref (map first))))
+  (diplomat.db/load-db! :accounts))
+
+(defn all-accounts []
+  (->> diplomat.db/databases deref :accounts deref))
 
 (s/defn one-account! :- (s/maybe wire.account/Account)
   [account-id :- s/Uuid]

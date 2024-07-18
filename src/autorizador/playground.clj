@@ -3,6 +3,8 @@
             [autorizador.controller.transaction :as controller.transaction]
             [autorizador.diplomat.db :as diplomat.db]
             [autorizador.wire.account :as wire.account]
+            [cheshire.core :as json]
+            [org.httpkit.client :as http]
             [schema.core :as s]))
 
 (defn init-db! []
@@ -89,5 +91,19 @@
     (throw (Exception. "Other error"))
     (catch Exception e
       (rejection-code e)))
-  ;;
+
+  (defonce server (atom nil))
+  (reset! server (autorizador.server/start-server 8839))
+  (autorizador.server/stop-server @server)
+
+  @(http/get "http://localhost:8839/api/v1/accounts")
+  @(http/post "http://localhost:8839/api/v1/transaction"
+              {:body (json/generate-string
+                      {:transaction {:id         #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
+                                     :account-id #uuid "09a06fdb-20e4-4c72-9a69-68b7c97df23b"
+                                     :amount     123.45M
+                                     :merchant   "PADARIA DO ZE               SAO PAULO BR"
+                                     :mcc        :5811}})})
+
+;;
   )

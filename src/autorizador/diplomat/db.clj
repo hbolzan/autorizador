@@ -19,8 +19,6 @@
   ([db-id data-record] (update-record! db-id data-record assoc))
   ([db-id data-record swap-fn] (update-record! db-id data-record swap-fn :id))
   ([db-id data-record swap-fn index-key]
-   (println "************ update-record!")
-   (println data-record)
    (swap! (get @databases db-id) swap-fn (get data-record index-key) data-record)))
 
 (defn file-name [db-id]

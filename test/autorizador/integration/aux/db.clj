@@ -13,11 +13,11 @@
                   :cash 0.00M}})
 
 (defn transact [account-id mcc amount merchant]
-  (let [t-db #:transaction{:id         (random-uuid)
-                           :account-id account-id
-                           :amount     amount
-                           :mcc        mcc
-                           :merchant   merchant}]
+  (let [t-db #:transaction{:id          (random-uuid)
+                           :account-id  account-id
+                           :amount      amount
+                           :mcc         mcc
+                           :merchant-id merchant}]
     (controller.transaction/authorize! t-db)))
 
 (defn create-account!

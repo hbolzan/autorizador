@@ -10,11 +10,11 @@
 (def merchant-9999 {:id "UBER TRIP                   SAO PAULO BR" :mcc :9999})
 
 (defn transaction [mcc merchant]
-  #:transaction {:id         #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
-                 :account-id #uuid "09a06fdb-20e4-4c72-9a69-68b7c97df23b"
-                 :amount     123.45M
-                 :mcc        mcc
-                 :merchant   (or (:id merchant) "PADARIA DO ZE               SAO PAULO BR")})
+  #:transaction {:id          #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
+                 :account-id  #uuid "09a06fdb-20e4-4c72-9a69-68b7c97df23b"
+                 :amount      123.45M
+                 :mcc         mcc
+                 :merchant-id (or (:id merchant) "PADARIA DO ZE               SAO PAULO BR")})
 
 (deftest transaction->benefit-category
   (testing "Maps transaction mcc to benefit category or cash")

@@ -29,11 +29,11 @@
                   :cash cash}})
 
 (defn transaction [mcc amount]
-  #:transaction{:id         (random-uuid)
-                :account-id (random-uuid)
-                :amount     amount
-                :mcc        mcc
-                :merchant   "PADARIA DO ZE               SAO PAULO BR"})
+  #:transaction{:id          (random-uuid)
+                :account-id  (random-uuid)
+                :amount      amount
+                :mcc         mcc
+                :merchant-id "PADARIA DO ZE               SAO PAULO BR"})
 
 (deftest sufficient-funds?
   (testing "Checks if there are funds enough in the account for the MCC mapped by the transaction"
@@ -89,23 +89,23 @@
                :category  :cash}]
              :balances    {:food 10.00M :meal 0.00M :cash 10.00M}})
 
-(def tr #:transaction{:id         #uuid "fad45ef5-8035-4302-9f42-fa8eb06e7467"
-                      :account-id #uuid "b05f3600-167d-42a9-9812-c64db1ec0d80"
-                      :amount     8.50M
-                      :mcc        :5412
-                      :merchant   "PADARIA DO ZE               SAO PAULO BR"})
+(def tr #:transaction{:id          #uuid "fad45ef5-8035-4302-9f42-fa8eb06e7467"
+                      :account-id  #uuid "b05f3600-167d-42a9-9812-c64db1ec0d80"
+                      :amount      8.50M
+                      :mcc         :5412
+                      :merchant-id "PADARIA DO ZE               SAO PAULO BR"})
 
-(def cash-tr #:transaction{:id         #uuid "fad45ef5-8035-4302-9f42-fa8eb06e7467"
-                           :account-id #uuid "b05f3600-167d-42a9-9812-c64db1ec0d80"
-                           :amount     8.50M
-                           :mcc        :9999
-                           :merchant   "PADARIA DO ZE               SAO PAULO BR"})
+(def cash-tr #:transaction{:id          #uuid "fad45ef5-8035-4302-9f42-fa8eb06e7467"
+                           :account-id  #uuid "b05f3600-167d-42a9-9812-c64db1ec0d80"
+                           :amount      8.50M
+                           :mcc         :9999
+                           :merchant-id "PADARIA DO ZE               SAO PAULO BR"})
 
-(def fb-tr #:transaction{:id         #uuid "24b91168-bb2d-498f-8b45-7bea2e738d43"
-                         :account-id #uuid "ea282dc9-c11c-4cff-93af-2b74f505555a"
-                         :amount     15.00M
-                         :mcc        :5411
-                         :merchant   "PADARIA DO ZE               SAO PAULO BR"})
+(def fb-tr #:transaction{:id          #uuid "24b91168-bb2d-498f-8b45-7bea2e738d43"
+                         :account-id  #uuid "ea282dc9-c11c-4cff-93af-2b74f505555a"
+                         :amount      15.00M
+                         :mcc         :5411
+                         :merchant-id "PADARIA DO ZE               SAO PAULO BR"})
 
 (def acc+tr {:id          #uuid "09693c78-9c1d-483b-8306-fb1e430964b3"
              :customer-id #uuid "d740f20a-1074-4db0-896d-fa2418e8cf34"

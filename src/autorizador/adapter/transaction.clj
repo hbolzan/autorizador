@@ -5,8 +5,8 @@
 
 (s/defn wire->internal :- model.transaction/Transaction
   [{{:keys [id amount account-id merchant mcc]} :transaction} :- wire.transaction/Transaction]
-  #:transaction{:id         id
-                :account-id account-id
-                :amount     amount
-                :mcc        mcc
-                :merchant   merchant})
+  #:transaction{:id          id
+                :account-id  account-id
+                :amount      amount
+                :mcc         mcc
+                :merchant-id merchant})

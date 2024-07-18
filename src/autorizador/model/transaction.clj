@@ -3,8 +3,8 @@
   (:import [java.math BigDecimal]))
 
 (s/defschema Transaction
-  #:transaction {:id                       s/Uuid
-                 :account-id               s/Uuid
-                 :amount                   BigDecimal
-                 :mcc                      s/Keyword
-                 :merchant                 s/Str})
+  #:transaction {:id          s/Uuid
+                 :account-id  s/Uuid
+                 :amount      BigDecimal
+                 :mcc         s/Keyword
+                 :merchant-id s/Str})

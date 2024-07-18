@@ -38,8 +38,6 @@
       middleware/wrap-json-response))
 
 (defn start-server [port]
-  (controller.account/start-up!)
-  (controller.merchant/start-up!)
   (httpkit.server/run-server service {:port port}))
 
 (defn stop-server [server]
@@ -48,5 +46,7 @@
 (defn -main
   [& args]
   (let [port 8838]
+    (controller.account/start-up!)
+    (controller.merchant/start-up!)
     (println (format "Servidor escutando na porta %s" port))
     (start-server port)))

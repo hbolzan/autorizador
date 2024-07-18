@@ -11,7 +11,7 @@
 
 (defn one-record
   [db-id id]
-  (-> databases deref (get db-id) deref (get id)))
+  (some-> databases deref (get db-id) deref (get id)))
 
 (defn update-record!
   "Generic update record function that sets the value of a key in db-id database

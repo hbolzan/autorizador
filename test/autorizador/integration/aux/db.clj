@@ -1,5 +1,6 @@
 (ns autorizador.integration.aux.db
   (:require [autorizador.controller.account :as controller.account]
+            [autorizador.controller.merchant :as controller.merchant]
             [autorizador.controller.transaction :as controller.transaction]
             [autorizador.diplomat.db :as diplomat.db]))
 
@@ -13,11 +14,11 @@
                   :cash 0.00M}})
 
 (defn transact [account-id mcc amount merchant]
-  (let [t-db #:transaction{:id         (random-uuid)
-                           :account-id account-id
-                           :amount     amount
-                           :mcc        mcc
-                           :merchant   merchant}]
+  (let [t-db #:transaction{:id          (random-uuid)
+                           :account-id  account-id
+                           :amount      amount
+                           :mcc         mcc
+                           :merchant-id merchant}]
     (controller.transaction/authorize! t-db)))
 
 (defn create-account!
@@ -28,9 +29,15 @@
     (when (> food 0.00M) (transact account-id :5411 (- food) "CREDITO FOOD"))
     (when (> meal 0.00M) (transact account-id :5811 (- meal) "CREDITO MEAL"))
     (when (> cash 0.00M) (transact account-id :9999 (- cash) "CREDITO CASH"))
-    (controller.account/one-account! account-id)))
+    (controller.account/one! account-id)))
 
 (defn init-accounts-db!
   [food meal cash]
   (diplomat.db/init-db! :accounts)
   (create-account! food meal cash))
+
+(defn init-merchants-db!
+  [name mcc]
+  (diplomat.db/init-db! :merchants)
+  (diplomat.db/update-record! :merchants {:id name :mcc mcc})
+  (controller.merchant/one! name))

@@ -6,9 +6,9 @@
 (defn start-up! []
   (diplomat.db/load-db! :accounts))
 
-(defn all-accounts []
+(defn all! []
   (->> diplomat.db/databases deref :accounts deref))
 
-(s/defn one-account! :- (s/maybe wire.account/Account)
-  [account-id :- s/Uuid]
-  (diplomat.db/one-record :accounts account-id))
+(s/defn one! :- (s/maybe wire.account/Account)
+  [id :- s/Uuid]
+  (diplomat.db/one-record :accounts id))

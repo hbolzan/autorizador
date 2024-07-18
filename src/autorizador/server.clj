@@ -1,9 +1,10 @@
 (ns autorizador.server
   (:require [autorizador.controller.account :as controller.account]
+            [autorizador.controller.merchant :as controller.merchant]
             [autorizador.diplomat.http-in :as diplomat.http-in]
             [autorizador.middleware.input :as middleware.input]
             [autorizador.wire.transaction :as wire.transaction]
-            [compojure.core :refer [GET POST defroutes routes]]
+            [compojure.core :refer [defroutes GET POST routes]]
             [org.httpkit.server :as httpkit.server]
             [ring.middleware.json :as middleware]))
 
@@ -19,13 +20,15 @@
 
 (defroutes transaction
   (POST "/api/v1/transaction" request (diplomat.http-in/handle-transaction (:data request))))
-(defroutes accounts
+(defroutes info
   (GET "/api/v1/accounts" [] (diplomat.http-in/accounts))
-  (GET "/api/v1/accounts/:id" [id] (diplomat.http-in/one-account (parse-uuid id))))
+  (GET "/api/v1/accounts/:id" [id] (diplomat.http-in/one-account (parse-uuid id)))
+  (GET "/api/v1/merchants" [] (diplomat.http-in/merchants))
+  (GET "/api/v1/merchants/:name" [name] (diplomat.http-in/one-merchant name)))
 
 (def service
   (-> (routes
-       accounts
+       info
        (-> transaction
            ;; log-request
            (middleware.input/wrap-schema-validation wire.transaction/Transaction)
@@ -44,5 +47,6 @@
   [& args]
   (let [port 8838]
     (controller.account/start-up!)
+    (controller.merchant/start-up!)
     (println (format "Servidor escutando na porta %s" port))
     (start-server port)))

@@ -1,5 +1,6 @@
 (ns autorizador.playground
   (:require [autorizador.controller.account :as controller.account]
+            [autorizador.controller.merchant :as controller.merchant]
             [autorizador.controller.transaction :as controller.transaction]
             [autorizador.diplomat.db :as diplomat.db]
             [autorizador.wire.account :as wire.account]
@@ -29,11 +30,11 @@
                   :cash 0.00M}})
 
 (defn transact [account-id mcc amount merchant]
-  (let [t-db #:transaction{:id         (random-uuid)
-                           :account-id account-id
-                           :amount     amount
-                           :mcc        mcc
-                           :merchant   merchant}]
+  (let [t-db #:transaction{:id          (random-uuid)
+                           :account-id  account-id
+                           :amount      amount
+                           :mcc         mcc
+                           :merchant-id merchant}]
     (controller.transaction/authorize! t-db)))
 
 (defn create-account!
@@ -44,12 +45,50 @@
     (when (> food 0.00M) (transact account-id :5411 (- food) "CREDITO FOOD"))
     (when (> meal 0.00M) (transact account-id :5811 (- meal) "CREDITO MEAL"))
     (when (> cash 0.00M) (transact account-id :9999 (- cash) "CREDITO CASH"))
-    (controller.account/one-account! account-id)))
+    (controller.account/one! account-id)))
 
 (comment
-  (init-db!)
+  :http
 
-  ;; create some accounts
+  (defonce server (atom nil))
+  (reset! server (autorizador.server/start-server 8839))
+  (autorizador.server/stop-server @server)
+
+  @(http/get "http://localhost:8839/api/v1/accounts")
+  @(http/get "http://localhost:8839/api/v1/merchants")
+
+  @(http/get "http://localhost:8839/api/v1/accounts/09a06fdb-20e4-4c72-9a69-68b7c97df23b")
+  @(http/post "http://localhost:8839/api/v1/transaction"
+              {:body (json/generate-string
+                      {:transaction {:id         #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
+                                     :account-id #uuid "0b35718a-50ca-481a-b221-2fe20b3dec4a"
+                                     :amount     10.00M
+                                     :merchant   "PAG*JoseDaSilva          RIO DE JANEI BR"
+                                     :mcc        :5811}})})
+
+  ;;
+  )
+
+(comment
+  :merchnts
+
+  (diplomat.db/init-db! :merchants)
+
+  ;; add merchants
+  (diplomat.db/update-record! :merchants {:id "UBER TRIP                   SAO PAULO BR" :mcc :9999})
+  (diplomat.db/update-record! :merchants {:id "UBER EATS                   SAO PAULO BR" :mcc :5812})
+  (diplomat.db/update-record! :merchants {:id "PAG*JoseDaSilva          RIO DE JANEI BR" :mcc :5411})
+  (diplomat.db/save-db! :merchants)
+
+  (diplomat.db/load-db! :merchants)
+  (controller.merchant/one! "UBER EATS                   SAO PAULO BR")
+  ;;
+  )
+
+(comment
+
+;; create some accounts
+  (init-db!)
   (create-account! 200.00M 300.00M 500.00M)
   (create-account! 0.00M 100.00M 50.00M)
   (create-account! 1000.00M 0.00M 0.00M)
@@ -62,7 +101,7 @@
   (accounts-list)
 
   ;; get account detail
-  (controller.account/one-account! #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07")
+  (controller.account/one! #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07")
 
   ;; add some transactions
   (let [account-id #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07"]
@@ -71,7 +110,7 @@
     (transact account-id :9999 480.00M "PADARIA DO ZE               SAO PAULO BR"))
 
   ;; look at the account
-  (controller.account/one-account! #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07")
+  (controller.account/one! #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07")
 
   ;; the next transaction wikk be denied
   (transact #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07" :5411 70.00M "PADARIA DO ZE               SAO PAULO BR")
@@ -91,19 +130,6 @@
     (throw (Exception. "Other error"))
     (catch Exception e
       (rejection-code e)))
-
-  (defonce server (atom nil))
-  (reset! server (autorizador.server/start-server 8839))
-  (autorizador.server/stop-server @server)
-
-  @(http/get "http://localhost:8839/api/v1/accounts")
-  @(http/post "http://localhost:8839/api/v1/transaction"
-              {:body (json/generate-string
-                      {:transaction {:id         #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
-                                     :account-id #uuid "09a06fdb-20e4-4c72-9a69-68b7c97df23b"
-                                     :amount     123.45M
-                                     :merchant   "PADARIA DO ZE               SAO PAULO BR"
-                                     :mcc        :5811}})})
 
 ;;
   )

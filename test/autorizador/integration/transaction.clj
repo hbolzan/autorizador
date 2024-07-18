@@ -101,3 +101,34 @@
       (is (= {:food 200.0, :meal 100.0, :cash 500.0}
              (:balances (http-get (str "/accounts/" account-id))))
           "Balances did not change"))))
+
+(deftest merchant-transaction
+  (testing "Valid transaction approved"
+    (let [{account-id :id} (aux.db/init-accounts-db! 200.00M 300.00M 500.00M)
+          merchant (aux.db/init-merchants-db! "BAR DA ESQUINA" :5812)]
+      (is (= {:food 200.0, :meal 300.0, :cash 500.0}
+             (:balances (http-get (str "/accounts/" account-id))))
+          "Account initial balance is set")
+
+      (is (= {:status 200 :body {:authorization {:code "00"}}}
+             (http-post "/transaction" (transaction-body account-id 250.00M :5411 (:id merchant))))
+          "Trasaction approved, response status is 200")
+
+      (is (= {:food 200.0, :meal 50.0, :cash 500.0}
+             (:balances (http-get (str "/accounts/" account-id))))
+          "Amount was debited from meal account because of merchant mcc precedence"))))
+
+(deftest fallback-transaction
+  (testing "Valid transaction approved using cash fallback"
+    (let [{account-id :id} (aux.db/init-accounts-db! 200.00M 300.00M 500.00M)]
+      (is (= {:food 200.0, :meal 300.0, :cash 500.0}
+             (:balances (http-get (str "/accounts/" account-id))))
+          "Account initial balance is set")
+
+      (is (= {:status 200 :body {:authorization {:code "00"}}}
+             (http-post "/transaction" (transaction-body account-id 250.00M :5411)))
+          "Trasaction approved, response status is 200")
+
+      (is (= {:food 0.0, :meal 300.0, :cash 450.0}
+             (:balances (http-get (str "/accounts/" account-id))))
+          "Amount was debited from food and cash balances"))))

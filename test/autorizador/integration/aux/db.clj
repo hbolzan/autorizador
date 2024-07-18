@@ -1,5 +1,6 @@
 (ns autorizador.integration.aux.db
   (:require [autorizador.controller.account :as controller.account]
+            [autorizador.controller.merchant :as controller.merchant]
             [autorizador.controller.transaction :as controller.transaction]
             [autorizador.diplomat.db :as diplomat.db]))
 
@@ -34,3 +35,9 @@
   [food meal cash]
   (diplomat.db/init-db! :accounts)
   (create-account! food meal cash))
+
+(defn init-merchants-db!
+  [name mcc]
+  (diplomat.db/init-db! :merchants)
+  (diplomat.db/update-record! :merchants {:id name :mcc mcc})
+  (controller.merchant/one! name))

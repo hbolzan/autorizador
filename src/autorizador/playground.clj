@@ -48,15 +48,44 @@
     (controller.account/one! account-id)))
 
 (comment
+  :http
+
+  (defonce server (atom nil))
+  (reset! server (autorizador.server/start-server 8839))
+  (autorizador.server/stop-server @server)
+
+  @(http/get "http://localhost:8839/api/v1/accounts")
+  @(http/get "http://localhost:8839/api/v1/merchants")
+
+  @(http/get "http://localhost:8839/api/v1/accounts/09a06fdb-20e4-4c72-9a69-68b7c97df23b")
+  @(http/post "http://localhost:8839/api/v1/transaction"
+              {:body (json/generate-string
+                      {:transaction {:id         #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
+                                     :account-id #uuid "0b35718a-50ca-481a-b221-2fe20b3dec4a"
+                                     :amount     10.00M
+                                     :merchant   "PAG*JoseDaSilva          RIO DE JANEI BR"
+                                     :mcc        :5811}})})
+
+  ;;
+  )
+
+(comment
+  :merchnts
 
   (diplomat.db/init-db! :merchants)
+
   ;; add merchants
   (diplomat.db/update-record! :merchants {:id "UBER TRIP                   SAO PAULO BR" :mcc :9999})
   (diplomat.db/update-record! :merchants {:id "UBER EATS                   SAO PAULO BR" :mcc :5812})
   (diplomat.db/update-record! :merchants {:id "PAG*JoseDaSilva          RIO DE JANEI BR" :mcc :5411})
   (diplomat.db/save-db! :merchants)
 
+  (diplomat.db/load-db! :merchants)
   (controller.merchant/one! "UBER EATS                   SAO PAULO BR")
+  ;;
+  )
+
+(comment
 
 ;; create some accounts
   (init-db!)
@@ -101,19 +130,6 @@
     (throw (Exception. "Other error"))
     (catch Exception e
       (rejection-code e)))
-
-  (defonce server (atom nil))
-  (reset! server (autorizador.server/start-server 8839))
-  (autorizador.server/stop-server @server)
-
-  @(http/get "http://localhost:8839/api/v1/accounts")
-  @(http/post "http://localhost:8839/api/v1/transaction"
-              {:body (json/generate-string
-                      {:transaction {:id         #uuid "bc71f950-ef3f-46ff-a71d-838a3ec85012"
-                                     :account-id #uuid "09a06fdb-20e4-4c72-9a69-68b7c97df23b"
-                                     :amount     123.45M
-                                     :merchant   "PADARIA DO ZE               SAO PAULO BR"
-                                     :mcc        :5811}})})
 
 ;;
   )

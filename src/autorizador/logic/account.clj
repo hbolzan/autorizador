@@ -39,10 +39,10 @@
         balance  (-> (get balances category))
         cash     (:cash balances)
         funded   (min balance amount)
-        pending  (- amount funded)]
+        pending  (max 0.00M (- amount funded))]
     (-> account
-        (assoc-in [:balances category] (- balance funded))
-        (assoc-in [:balances :cash] (- cash pending)))))
+        (assoc-in [:balances :cash] (- cash pending))
+        (assoc-in [:balances category] (- balance funded)))))
 
 (s/defn updated-account :- wire.account/Account
   [account :- wire.account/Account

@@ -28,7 +28,7 @@
     (when (> food 0.00M) (transact account-id :5411 (- food) "CREDITO FOOD"))
     (when (> meal 0.00M) (transact account-id :5811 (- meal) "CREDITO MEAL"))
     (when (> cash 0.00M) (transact account-id :9999 (- cash) "CREDITO CASH"))
-    (controller.account/one-account! account-id)))
+    (controller.account/one! account-id)))
 
 (defn init-accounts-db!
   [food meal cash]

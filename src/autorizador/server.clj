@@ -19,13 +19,15 @@
 
 (defroutes transaction
   (POST "/api/v1/transaction" request (diplomat.http-in/handle-transaction (:data request))))
-(defroutes accounts
+(defroutes info
   (GET "/api/v1/accounts" [] (diplomat.http-in/accounts))
-  (GET "/api/v1/accounts/:id" [id] (diplomat.http-in/one-account (parse-uuid id))))
+  (GET "/api/v1/accounts/:id" [id] (diplomat.http-in/one-account (parse-uuid id)))
+  (GET "/api/v1/merchants" [] (diplomat.http-in/merchants))
+  (GET "/api/v1/merchants/:name" [name] (diplomat.http-in/one-merchant name)))
 
 (def service
   (-> (routes
-       accounts
+       info
        (-> transaction
            ;; log-request
            (middleware.input/wrap-schema-validation wire.transaction/Transaction)

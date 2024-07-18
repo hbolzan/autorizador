@@ -1,5 +1,6 @@
 (ns autorizador.playground
   (:require [autorizador.controller.account :as controller.account]
+            [autorizador.controller.merchant :as controller.merchant]
             [autorizador.controller.transaction :as controller.transaction]
             [autorizador.diplomat.db :as diplomat.db]
             [autorizador.wire.account :as wire.account]
@@ -44,12 +45,21 @@
     (when (> food 0.00M) (transact account-id :5411 (- food) "CREDITO FOOD"))
     (when (> meal 0.00M) (transact account-id :5811 (- meal) "CREDITO MEAL"))
     (when (> cash 0.00M) (transact account-id :9999 (- cash) "CREDITO CASH"))
-    (controller.account/one-account! account-id)))
+    (controller.account/one! account-id)))
 
 (comment
-  (init-db!)
 
-  ;; create some accounts
+  (diplomat.db/init-db! :merchants)
+  ;; add merchants
+  (diplomat.db/update-record! :merchants {:id "UBER TRIP                   SAO PAULO BR" :mcc :9999})
+  (diplomat.db/update-record! :merchants {:id "UBER EATS                   SAO PAULO BR" :mcc :5812})
+  (diplomat.db/update-record! :merchants {:id "PAG*JoseDaSilva          RIO DE JANEI BR" :mcc :5411})
+  (diplomat.db/save-db! :merchants)
+
+  (controller.merchant/one! "UBER EATS                   SAO PAULO BR")
+
+;; create some accounts
+  (init-db!)
   (create-account! 200.00M 300.00M 500.00M)
   (create-account! 0.00M 100.00M 50.00M)
   (create-account! 1000.00M 0.00M 0.00M)
@@ -62,7 +72,7 @@
   (accounts-list)
 
   ;; get account detail
-  (controller.account/one-account! #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07")
+  (controller.account/one! #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07")
 
   ;; add some transactions
   (let [account-id #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07"]
@@ -71,7 +81,7 @@
     (transact account-id :9999 480.00M "PADARIA DO ZE               SAO PAULO BR"))
 
   ;; look at the account
-  (controller.account/one-account! #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07")
+  (controller.account/one! #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07")
 
   ;; the next transaction wikk be denied
   (transact #uuid "c99be8af-5e11-4130-98d3-f7bfce521a07" :5411 70.00M "PADARIA DO ZE               SAO PAULO BR")

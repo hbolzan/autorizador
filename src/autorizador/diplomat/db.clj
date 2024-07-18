@@ -1,4 +1,5 @@
-(ns autorizador.diplomat.db)
+(ns autorizador.diplomat.db
+  (:require [clojure.java.io :as io]))
 
 (def databases (atom {}))
 
@@ -29,8 +30,13 @@
   [db-id]
   (spit (file-name db-id) (-> databases deref (get db-id) deref)))
 
+(defn file-exists
+  [filename]
+  (when (.exists (io/file filename))
+    filename))
+
 (defn load-db!
   "Load data from edn file into db"
   [db-id]
-  (let [content (-> db-id file-name slurp read-string)]
+  (let [content (or (some-> db-id file-name file-exists slurp read-string) {})]
     (init-db! db-id content)))

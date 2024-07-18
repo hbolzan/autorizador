@@ -74,8 +74,8 @@
 
 (deftest denied-transaction
   (testing "Valid transaction denied for insufficient funds"
-    (let [{account-id :id} (aux.db/init-accounts-db! 200.00M 10.00M 500.00M)]
-      (is (= {:food 200.0, :meal 10.0, :cash 500.0}
+    (let [{account-id :id} (aux.db/init-accounts-db! 200.00M 10.00M 5.00M)]
+      (is (= {:food 200.0, :meal 10.0, :cash 5.0}
              (:balances (http-get (str "/accounts/" account-id))))
           "Account initial balance is set")
 
@@ -83,7 +83,7 @@
              (http-post "/transaction" (transaction-body account-id 50.00M :5811)))
           "Trasaction denied for insufficient funds, response status is 200")
 
-      (is (= {:food 200.0, :meal 10.0, :cash 500.0}
+      (is (= {:food 200.0, :meal 10.0, :cash 5.0}
              (:balances (http-get (str "/accounts/" account-id))))
           "Balances did not change"))))
 

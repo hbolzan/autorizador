@@ -47,7 +47,7 @@
       (new-account 10.00M 10.00M  0.00M) (transaction :9999 10.00M) false
       (new-account 10.00M  0.00M  0.00M) (transaction :5411 10.01M) false
       (new-account 10.00M 10.00M  0.00M) (transaction :5411 15.00M) false
-      (new-account 10.00M 10.00M 10.00M) (transaction :5411 15.00M) false)))
+      (new-account 10.00M 10.00M  2.00M) (transaction :5411 15.00M) false)))
 
 (deftest sufficient-funds?-with-falback
   (testing "Try to fund with the category mapped by the transaction with fallback to cash"

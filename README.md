@@ -57,6 +57,7 @@ O projeto é amplamente coberto por testes unitários, visando abranger todos os
 ### Banco de dados
 Para o banco de dados, optei por uma abordagem simplificada utilizando um atom do Clojure como storage. Essa escolha me ajudou a manter o foco no desafio principal sem adicionar a complexidade de um banco de dados real. Ao mesmo tempo, as atualizações do atom são atômicas e serializadas, replicando o comportamento de um banco de dados com capacidades de transações atômicas.
  Isso garante a consistência nas operações de escrita. Para a persistência dos dados em disco, incluí no módulo de dados funções que realizam a gravação e leitura em arquivos `.edn` separados para cada entidade. As funções do banco de dados estão localizadas no namespace `autorizador.diplomat.db`.
+
  **Possíveis melhorias (fora do escopo do desafio):** Apesar de ter implementado funções de persistência em disco, a gravação não está sendo feita automaticamente. Eu utilizei esse recurso apenas para gerar os dados de amostra que são lidos automaticamente no momento que o servidor inicia. Uma possível melhoria seria a inclusão de um job periódico para fazer a persistência assíncrona.
 
 ### Modelos de dados

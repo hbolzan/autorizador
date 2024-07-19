@@ -38,11 +38,12 @@ No namespace `autorizador.playground` existem vários exemplos de código que in
 ### Arquitetura
 A arquitetura segue o padrão de portas e adaptadores. Esse padrão promove a separação de responsabilidades, facilitando a testabilidade, manutenção e extensibilidade do código.
 
-
+### Desafios
 A cada desafio, abri um PR separado para possibilitar a visualização da evolução do projeto em cada iteração.
 - Desafio L1 - [PR 1](https://github.com/hbolzan/autorizador/pull/1)
 - Desafio L2 - [PR 2](https://github.com/hbolzan/autorizador/pull/2)
 - Desafio L3 - [PR 3](https://github.com/hbolzan/autorizador/pull/3)
+- [Desafio L4](doc/concurrency.md)
 
 ### Testes
 O projeto é amplamente coberto por testes unitários, visando abranger todos os casos de uso. Além disso, foram incluídos testes de integração. A análise dos testes permite compreender o funcionamento da lógica, conhecer os payloads e entender as intenções por trás do design de cada componente.
